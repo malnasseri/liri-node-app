@@ -44,10 +44,10 @@ inquirer.prompt([
             console.log('created at: ' + tweets[i].created_at);
             console.log('Tweets: ' + tweets[i].text);
             console.log("---------------------------------------------------");
-      }//for loop ends
-    } //if statement checking link ends
-  }); // call back function ends
-}; // getTweets function ends
+          }//for loop ends
+      } //if statement checking link ends
+    }); // call back function ends
+  }; // getTweets function ends
  }  //if statement for user picking my-tweets from options ends     
 
 
@@ -142,8 +142,8 @@ inquirer.prompt([
                   });//end of spotify search 
               };//end of else statement 
 
-}); //end of inquirer call back function
-}; //end of spotify else if statement 
+            }); //end of inquirer call back function
+      }; //end of spotify else if statement 
 
    
 
