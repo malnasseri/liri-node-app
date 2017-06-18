@@ -1,6 +1,5 @@
 //require keys from another file
 var keys = require("./keys.js");
-
 // require inquirer npm 
 var inquirer = require("inquirer");
 
@@ -10,13 +9,13 @@ inquirer.prompt([
  {  //creating list of options for user to pick
     type: "list",
     message: "What would you like to do? Please pick one of the following options!!\nPress Enter to continue",
-    choices: ["my-tweets","spotify-this-song"],
+    choices: ["My-Tweets","Spotify-This-Song","Movie-This","Do-What-it-Says"],
     name: "options"
   }
-    //inquirer call back function
+    //inquirer call back function for all the options 
   ]).then(function(user) {
     //when user picks my-tweets it will execute the function
-    if(user.options === "my-tweets") {
+    if(user.options === "My-Tweets") {
         
         getTweets();
       // function to grab tweets
@@ -36,13 +35,13 @@ inquirer.prompt([
       if (!error && response.statusCode === 200) {
 
           // loops through tweets
-    	   for (var i = 0; i < tweets.length; i++) {
-  		  
+         for (var i = 0; i < tweets.length; i++) {
+        
             // This will print out 20 tweets from the account 
 
             console.log("---------------------------------------------------");
             console.log('created at: ' + tweets[i].created_at);
-            console.log('Tweets: ' + tweets[i].text);
+            console.log('Tweet: ' + tweets[i].text);
             console.log("---------------------------------------------------");
           }//for loop ends
       } //if statement checking link ends
@@ -52,7 +51,7 @@ inquirer.prompt([
 
 
       //if user picks spotify 
-    else if(user.options === "spotify-this-song") { 
+    else if(user.options === "Spotify-This-Song") { 
 
         inquirer.prompt([
   
@@ -143,28 +142,109 @@ inquirer.prompt([
               };//end of else statement 
 
             }); //end of inquirer call back function
-      }; //end of spotify else if statement 
+      } //end of spotify else if statement 
 
-   
+      // if user picks movie-this
+      else if(user.options === "Movie-This") {
+
+          // prompt for user input
+          inquirer.prompt([
+  
+            { //takes a movie name from user input
+            type: "input",
+            message: "Enter a movie name bro: ",
+            name: "movieName"
+            }
+         //inquirer call back function 
+        ]).then(function(user) {
+              
+              var request = require('request');
+
+              if(user.movieName === ""){
+
+
+                  var queryUrl = "http://www.omdbapi.com/?t=Mr+Nobody&y=&plot=short&apikey=40e9cece&tomatoes=true";
+
+                   request(queryUrl, function(error, response, body) {
+
+                      // If the request is successful
+                      if (!error && response.statusCode === 200) {
 
 
 
 
+                        var movies = response.body;
 
-        //here will be omdb function
+                        
+                            console.log("----------------------------------------------------");
+                            console.log("   Movie Title: " + JSON.parse(movies).Title);
+                            console.log("----------------------------------------------------");
+                            console.log("   Year Released: " + JSON.parse(movies).Year);
+                            console.log("----------------------------------------------------");
+                            console.log("   imdb Rating: " + JSON.parse(movies).imdbRating);
+                            console.log("----------------------------------------------------");
+                            console.log("   Country: " + JSON.parse(movies).Country);
+                            console.log("----------------------------------------------------");
+                            console.log("   Language: " + JSON.parse(movies).Language);
+                            console.log("----------------------------------------------------");
+                            console.log("   Plot:\n " + JSON.parse(movies).Plot);
+                            console.log("----------------------------------------------------");
+                            console.log("   Actors: " + JSON.parse(movies).Actors);
+                            console.log("----------------------------------------------------");
+                            console.log("  Rotten Tomatoes URL:\n " + JSON.parse(movies).tomatoURL);
+                            console.log("----------------------------------------------------");
+                        //for loop ends
+                      }//end of if statment 
+
+                    });
+                 }
+
+                 else   {
+
+              // Then run a request to the OMDB API with the movie specified
+          var queryUrl = "http://www.omdbapi.com/?t=" + user.movieName + "&y=&plot=short&apikey=40e9cece&tomatoes=true";
+
+
+            request(queryUrl, function(error, response, body) {
+
+              // If the request is successful
+              if (!error && response.statusCode === 200) {
 
 
 
 
+                var movies = response.body;
 
+                
 
+                            console.log("----------------------------------------------------");
+                            console.log("   Movie Title: " + JSON.parse(movies).Title);
+                            console.log("----------------------------------------------------");
+                            console.log("   Year Released: " + JSON.parse(movies).Year);
+                            console.log("----------------------------------------------------");
+                            console.log("   imdb Rating: " + JSON.parse(movies).imdbRating);
+                            console.log("----------------------------------------------------");
+                            console.log("   Country: " + JSON.parse(movies).Country);
+                            console.log("----------------------------------------------------");
+                            console.log("   Language: " + JSON.parse(movies).Language);
+                            console.log("----------------------------------------------------");
+                            console.log("   Plot:\n " + JSON.parse(movies).Plot);
+                            console.log("----------------------------------------------------");
+                            console.log("   Actors: " + JSON.parse(movies).Actors);
+                            console.log("----------------------------------------------------");
+                            console.log("  Rotten Tomatoes URL:\n " + JSON.parse(movies).tomatoURL);
+                            console.log("----------------------------------------------------");
 
+              }//if statement ends
+            }); // request call back function ends
+          }; // else statement ends
+    
+      });
 
+  } //end of imbd app remember to take the semi colon off before starting what to do app
 
-
-
-
-});
+        
+});// end of inquirer for all the options 
 
 
 
