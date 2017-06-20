@@ -233,28 +233,28 @@
                                     var queryUrl = "http://www.omdbapi.com/?t=" + user.movieName + "&y=&plot=short&apikey=40e9cece&tomatoes=true";
 
                                     request(queryUrl, function(error, response, body) {
-                                                var colors = require('colors');
+                                                
                                               // If the request is successful
                                               if (!error && response.statusCode === 200) {
 
                                                             var movies = response.body;
 
                                                             console.log("----------------------------------------------------");
-                                                            console.log("   Movie Title: " + JSON.parse(movies).Title.red.bold);
+                                                            console.log("   Movie Title: " + JSON.parse(movies).Title);
                                                             console.log("----------------------------------------------------");
-                                                            console.log("   Year Released: " + JSON.parse(movies).Year.red.bold);
+                                                            console.log("   Year Released: " + JSON.parse(movies).Year);
                                                             console.log("----------------------------------------------------");
-                                                            console.log("   imdb Rating: " + JSON.parse(movies).imdbRating.red.bold);
+                                                            console.log("   imdb Rating: " + JSON.parse(movies).imdbRating);
                                                             console.log("----------------------------------------------------");
-                                                            console.log("   Country: " + JSON.parse(movies).Country.red.bold);
+                                                            console.log("   Country: " + JSON.parse(movies).Country);
                                                             console.log("----------------------------------------------------");
-                                                            console.log("   Language: " + JSON.parse(movies).Language.red.bold);
+                                                            console.log("   Language: " + JSON.parse(movies).Language);
                                                             console.log("----------------------------------------------------");
-                                                            console.log("   Plot:\n " + JSON.parse(movies).Plot.red);
+                                                            console.log("   Plot:\n " + JSON.parse(movies).Plot);
                                                             console.log("----------------------------------------------------");
-                                                            console.log("   Actors: " + JSON.parse(movies).Actors.red.bold);
+                                                            console.log("   Actors: " + JSON.parse(movies).Actors);
                                                             console.log("----------------------------------------------------");
-                                                            console.log("  Rotten Tomatoes URL:\n " + JSON.parse(movies).tomatoURL.blue);
+                                                            console.log("  Rotten Tomatoes URL:\n " + JSON.parse(movies).tomatoURL);
                                                             console.log("----------------------------------------------------");
 
                                                }//if statement ends
