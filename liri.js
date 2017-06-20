@@ -4,22 +4,52 @@
     // require inquirer npm 
     var inquirer = require("inquirer");
 
-    inquirer.prompt([
+    var colors = require('colors');
 
-           {  //creating list of options for user to pick
-              type: "list",
-              message: "What would you like to do? Please pick one of the following options!!\nPress Enter to continue",
-              choices: ["My-Tweets","Spotify-This-Song","Movie-This","Do-What-it-Says"],
-              name: "options"
-            }
-    //inquirer call back function for all the options 
-    ]).then(function(user) {
+    var fs = require('fs');
+     // function to grab tweets
+     inquirer.prompt([
 
-        //when user picks my-tweets it will execute the function
-        if(user.options === "My-Tweets") {
+                   {  //creating list of options for user to pick
+                      type: "list",
+                      message: "What would you like to do? Please pick one of the following options!!\nPress Enter to continue",
+                      choices: ["My-Tweets","Spotify-This-Song","Movie-This","Do-What-it-Says"],
+                      name: "options"
+                    }
+            //inquirer call back function for all the options 
+            ]).then(function(user) {
+
+                    //if user picks My-Tweets it will execute the function
+                     if(user.options === "My-Tweets") {
         
-              getTweets();
-              // function to grab tweets
+                            getTweets();
+            
+                     }//end of twitter else if statement    
+
+                     //if user picks spotify it will execute the function
+                     else if(user.options === "Spotify-This-Song") { 
+
+                            spotifyThisSong();
+
+                     }//end of spotify else if statement 
+
+                     // if user picks movie-this it will execute the function
+                     else if(user.options === "Movie-This") {
+
+                            movieThis();
+                     }//end of movie else if statement 
+
+                     //if user picks Do-What-it-Says it will execute the function
+                     else if(user.options === "Do-What-it-Says") {   
+
+                            doWhatItSays();
+
+                     };//end of Do What else if statement
+
+                   
+        });// end of inquirer for all the options 
+
+
               function getTweets(){
               // require twitter npm app
               var twitter = require('twitter');
@@ -41,79 +71,78 @@
         
                                   // This will print out 20 tweets from the account 
                                   console.log("---------------------------------------------------");
-                                  console.log('created at: ' + tweets[i].created_at);
-                                  console.log('Tweet: ' + tweets[i].text);
+                                  console.log('created at: '.bold + tweets[i].created_at.bold);
+                                  console.log('Tweet: '.bold + tweets[i].text.red.bold);
                                   console.log("---------------------------------------------------");
                             }//for loop ends
                         } //if statement checking link ends
                     }); // call back function ends
               }; // getTweets function ends
-          }  //if statement for user picking my-tweets from options ends     
 
-          //if user picks spotify 
-         else if(user.options === "Spotify-This-Song") { 
+              //creationg functions that handles spotify
+              function spotifyThisSong(){
 
-              inquirer.prompt([
-  
-                    { //takes a song name from user input
-                    type: "input",
-                    message: "Enter a song name bro: ",
-                    name: "songName"
-                    }
-              //inquirer call back function 
-              ]).then(function(user) {
+                      inquirer.prompt([
+          
+                            { //takes a song name from user input
+                            type: "input",
+                            message: "Enter a song name bro: ",
+                            name: "songName"
+                            }
+                      //inquirer call back function 
+                      ]).then(function(user) {
 
-                    // require spotify npm
-                    var Spotify = require('node-spotify-api');
-                    // adding id and secret
-                    var spotify = new Spotify({
-                    id: "15327b32486a4fda88a3e9ec70fa7c1e",
-                    secret: "5cbd33ae0f4e4083bd14097df393323a"
-                    });
+                                // require spotify npm
+                                var Spotify = require('node-spotify-api');
+                                // adding id and secret
+                                var spotify = new Spotify({
+                                id: "15327b32486a4fda88a3e9ec70fa7c1e",
+                                secret: "5cbd33ae0f4e4083bd14097df393323a"
+                                });
 
-                    if(user.songName === ""){
+                                if(user.songName === ""){
 
-                          //spotify search function for the sign
-                          spotify.search({
-                          type: 'track',
-                          query: 'ace+of+base+sign' + '&limit=1&'
-                          }, function(error, data) {
+                                      //spotify search function for the sign
+                                      spotify.search({
+                                      type: 'track',
+                                      query: 'ace+of+base+sign' + '&limit=1&'
+                                      }, function(error, data) {
 
-                                  if (error) {
+                                                if (error) {
 
-                                  console.log('Error occurred: ' + error);
-                                  return;
-                                  }
+                                                console.log('Error occurred: ' + error);
+                                                return;
+                                                }
 
-                                  var songs = data.tracks.items;
+                                                var songs = data.tracks.items;
 
-                                  // for loop to get song's info
-                                  for (var i = 0; i < songs.length; i++) {
+                                                // for loop to get song's info
+                                                for (var i = 0; i < songs.length; i++) {
 
-                                        //for loop to get artist's name
-                                         for(var j =0; j < songs[i].artists.length; j++){
+                                                          //for loop to get artist's name
+                                                           for(var j =0; j < songs[i].artists.length; j++){
 
-                                                    //printing Artist name
-                                                   console.log("---------------------------------------------------");
-                                                   console.log('Artist(s): ' + songs[i].artists[j].name);
-                                         }//artist name for loop ends here
-                                         // printing out song info
-                                         console.log("---------------------------------------------------");
-                                         console.log('Song Name: ' + songs[i].name);
-                                         console.log("---------------------------------------------------");
-                                         //added a line so users can copy the url easier from one line
-                                         console.log('Preview Song:\n ' + songs[i].preview_url);
-                                         console.log("---------------------------------------------------");
-                                         console.log('Album: ' + songs[i].album.name);
-                                         console.log("---------------------------------------------------");
-                                  };//end of for loop
-                            });//end of spotify search function
-                      }//end of if statement
+                                                                    //printing Artist name
+                                                                   console.log("---------------------------------------------------");
+                                                                   console.log('Artist(s): '.bold + songs[i].artists[j].name.red.bold);
+                                                           }//artist name for loop ends here
+                                                           // printing out song info
+                                                           console.log("---------------------------------------------------");
+                                                           console.log('Song Name: '.bold + songs[i].name.red.bold);
+                                                           console.log("---------------------------------------------------");
+                                                           //added a line so users can copy the url easier from one line
+                                                           console.log('Preview Song:\n '.bold + songs[i].preview_url.blue);
+                                                           console.log("---------------------------------------------------");
+                                                           console.log('Album: '.bold + songs[i].album.name.red.bold);
+                                                           console.log("---------------------------------------------------");
+                                                 };//end of for loop
+                                        });//end of spotify search function
+                                }//end of if statement
 
-                      else {
+                                else {
 
-                            //spotify search function
-                            spotify.search({ type: 'track', query:user.songName, limit:1 }, function(err, data) {
+                                      //spotify search function
+                                      spotify.search({ type: 'track', query:user.songName, limit:1 }, function(err, data) {
   
                                       if (err) {
                                       return console.log('Error occurred: ' + err);
@@ -128,27 +157,29 @@
 
                                                           //printing Artist name
                                                          console.log("---------------------------------------------------");
-                                                         console.log('Artist(s): ' + songs[i].artists[j].name);
+                                                         console.log('Artist(s): '.bold + songs[i].artists[j].name.red.bold);
                                                   }//artist name for loop ends here
 
                                                   // printing song's info
                                                   console.log("---------------------------------------------------");
-                                                  console.log('Song Name: ' + songs[i].name);
+                                                  console.log('Song Name: '.bold + songs[i].name.red.bold);
                                                   console.log("---------------------------------------------------");
                                                   //added a line so users can copy the url easier from one line 
-                                                  console.log('Preview Song:\n ' + songs[i].preview_url);
+                                                  console.log('Preview Song:\n '.bold + songs[i].preview_url.blue);
                                                   console.log("---------------------------------------------------");
-                                                  console.log('Album: ' + songs[i].album.name);
+                                                  console.log('Album: '.bold + songs[i].album.name.red.bold);
                                                   console.log("---------------------------------------------------");
 
                                       };//end of for loop
                               });//end of spotify search 
                         };//end of else statement 
                         }); //end of inquirer call back function
-         } //end of spotify else if statement 
+              };// end of spotifyThisSong function
 
-         // if user picks movie-this
-         else if(user.options === "Movie-This") {
+
+
+              //creating function that handles movie search
+              function movieThis(){
 
                   // prompt for user input
                   inquirer.prompt([
@@ -175,26 +206,26 @@
                                                         var movies = response.body;
 
                                                         console.log("----------------------------------------------------");
-                                                        console.log("   Movie Title: " + JSON.parse(movies).Title);
+                                                        console.log("   Movie Title: ".bold + JSON.parse(movies).Title.red.bold);
                                                         console.log("----------------------------------------------------");
-                                                        console.log("   Year Released: " + JSON.parse(movies).Year);
+                                                        console.log("   Year Released: ".bold + JSON.parse(movies).Year.red.bold);
                                                         console.log("----------------------------------------------------");
-                                                        console.log("   imdb Rating: " + JSON.parse(movies).imdbRating);
+                                                        console.log("   imdb Rating: ".bold + JSON.parse(movies).imdbRating.red.bold);
                                                         console.log("----------------------------------------------------");
-                                                        console.log("   Country: " + JSON.parse(movies).Country);
+                                                        console.log("   Country: ".bold + JSON.parse(movies).Country.red.bold);
                                                         console.log("----------------------------------------------------");
-                                                        console.log("   Language: " + JSON.parse(movies).Language);
+                                                        console.log("   Language: ".bold + JSON.parse(movies).Language.red.bold);
                                                         console.log("----------------------------------------------------");
-                                                        console.log("   Plot:\n " + JSON.parse(movies).Plot);
+                                                        console.log("   Plot:\n ".bold + JSON.parse(movies).Plot.red);
                                                         console.log("----------------------------------------------------");
-                                                        console.log("   Actors: " + JSON.parse(movies).Actors);
+                                                        console.log("   Actors: ".bold + JSON.parse(movies).Actors.red.bold);
                                                         console.log("----------------------------------------------------");
-                                                        console.log("  Rotten Tomatoes URL:\n " + JSON.parse(movies).tomatoURL);
+                                                        console.log("  Rotten Tomatoes URL:\n ".bold + JSON.parse(movies).tomatoURL.blue);
                                                         console.log("----------------------------------------------------");
                         
                                                 }//end of if statment 
-                                    });
-                             }
+                                    });// request call back function ends here
+                             }// if statement ends here
 
                             else {
 
@@ -202,61 +233,83 @@
                                     var queryUrl = "http://www.omdbapi.com/?t=" + user.movieName + "&y=&plot=short&apikey=40e9cece&tomatoes=true";
 
                                     request(queryUrl, function(error, response, body) {
-
+                                                var colors = require('colors');
                                               // If the request is successful
                                               if (!error && response.statusCode === 200) {
 
                                                             var movies = response.body;
 
                                                             console.log("----------------------------------------------------");
-                                                            console.log("   Movie Title: " + JSON.parse(movies).Title);
+                                                            console.log("   Movie Title: " + JSON.parse(movies).Title.red.bold);
                                                             console.log("----------------------------------------------------");
-                                                            console.log("   Year Released: " + JSON.parse(movies).Year);
+                                                            console.log("   Year Released: " + JSON.parse(movies).Year.red.bold);
                                                             console.log("----------------------------------------------------");
-                                                            console.log("   imdb Rating: " + JSON.parse(movies).imdbRating);
+                                                            console.log("   imdb Rating: " + JSON.parse(movies).imdbRating.red.bold);
                                                             console.log("----------------------------------------------------");
-                                                            console.log("   Country: " + JSON.parse(movies).Country);
+                                                            console.log("   Country: " + JSON.parse(movies).Country.red.bold);
                                                             console.log("----------------------------------------------------");
-                                                            console.log("   Language: " + JSON.parse(movies).Language);
+                                                            console.log("   Language: " + JSON.parse(movies).Language.red.bold);
                                                             console.log("----------------------------------------------------");
-                                                            console.log("   Plot:\n " + JSON.parse(movies).Plot);
+                                                            console.log("   Plot:\n " + JSON.parse(movies).Plot.red);
                                                             console.log("----------------------------------------------------");
-                                                            console.log("   Actors: " + JSON.parse(movies).Actors);
+                                                            console.log("   Actors: " + JSON.parse(movies).Actors.red.bold);
                                                             console.log("----------------------------------------------------");
-                                                            console.log("  Rotten Tomatoes URL:\n " + JSON.parse(movies).tomatoURL);
+                                                            console.log("  Rotten Tomatoes URL:\n " + JSON.parse(movies).tomatoURL.blue);
                                                             console.log("----------------------------------------------------");
 
                                                }//if statement ends
                                     }); // request call back function ends
                               }; // else statement ends
-                      });
-            }//end of imbd app remember to take the semi colon off before starting what to do app
+                      });//inquirer input function ends here
+              };// movieThis function ends here
 
 
+              function doWhatItSays() {
 
+                         
+                         fs.readFile("random.txt", "utf8", function(error, data) {
+                                
+                               
+                                var dataArr = data.split(',');
+                                // console.log(dataArr[2]);
 
+                                if(dataArr[0] == "Spotify-This-Song"){
+                                                 // require spotify npm
+                                              var Spotify = require('node-spotify-api');
+                                              // adding id and secret
+                                              var spotify = new Spotify({
+                                              id: "15327b32486a4fda88a3e9ec70fa7c1e",
+                                              secret: "5cbd33ae0f4e4083bd14097df393323a"
+                                              });
+                                              spotify.search({ type: 'track', query:dataArr[1], limit:1 }, function(err, data) {
+                                            
+                                                 var songs = data.tracks.items;
 
+                                                        // for loop to get song's info
+                                                        for (var i = 0; i < songs.length; i++) {
 
+                                                                  //for loop to get artist's name
+                                                                   for(var j =0; j < songs[i].artists.length; j++){
 
+                                                                            //printing Artist name
+                                                                           console.log("---------------------------------------------------");
+                                                                           console.log('Artist(s): '.bold + songs[i].artists[j].name.red.bold);
+                                                                   }//artist name for loop ends here
+                                                                   // printing out song info
+                                                                   console.log("---------------------------------------------------");
+                                                                   console.log('Song Name: '.bold + songs[i].name.red.bold);
+                                                                   console.log("---------------------------------------------------");
+                                                                   //added a line so users can copy the url easier from one line
+                                                                   console.log('Preview Song:\n '.bold + songs[i].preview_url.blue);
+                                                                   console.log("---------------------------------------------------");
+                                                                   console.log('Album: '.bold + songs[i].album.name.red.bold);
+                                                                   console.log("---------------------------------------------------");
+                                                         };//end of for loop
+                                                });//end of spotify search function
 
+                                }//end of if statement                                
 
+                             });//end of readFile call back function
 
+               };//end of DoWhatItSays function
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-});// end of inquirer for all the options 

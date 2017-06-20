@@ -4,6 +4,7 @@
   "description": "",
   "main": "liri.js",
   "dependencies": {
+    "colors": "^1.1.2",
     "file-system": "^2.2.2",
     "inquirer": "^3.1.0",
     "node-spotify-api": "^1.0.5",
