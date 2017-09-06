@@ -7,13 +7,16 @@
     var colors = require('colors');
 
     var fs = require('fs');
-     // function to grab tweets
+
+
+
+     function promptUser(){
      inquirer.prompt([
 
                    {  //creating list of options for user to pick
                       type: "list",
                       message: "What would you like to do? Please pick one of the following options!!\nPress Enter to continue",
-                      choices: ["My-Tweets","Spotify-This-Song","Movie-This","Do-What-it-Says"],
+                      choices: ["My-Tweets","Spotify-This-Song","Movie-This","Do-What-it-Says", "Exit"],
                       name: "options"
                     }
             //inquirer call back function for all the options 
@@ -44,11 +47,18 @@
 
                             doWhatItSays();
 
-                     };//end of Do What else if statement
+                     }//end of Do What else if statement
+                     //if user picks exit
+                     else if(user.options === "Exit") {   
 
+                            inquirer.prompt.end;
+
+                     };//end of Exit else if statement
                    
         });// end of inquirer for all the options 
+};// end of promptUser function
 
+            promptUser();
 
               function getTweets(){
               // require twitter npm app
@@ -76,6 +86,7 @@
                                   console.log("---------------------------------------------------");
                             }//for loop ends
                         } //if statement checking link ends
+                        promptUser();
                     }); // call back function ends
               }; // getTweets function ends
 
@@ -136,6 +147,7 @@
                                                            console.log('Album: '.bold + songs[i].album.name.red.bold);
                                                            console.log("---------------------------------------------------");
                                                  };//end of for loop
+                                                  promptUser();
                                         });//end of spotify search function
                                 }//end of if statement
 
@@ -156,7 +168,7 @@
                                                   for(var j =0; j < songs[i].artists.length; j++){
 
                                                           //printing Artist name
-                                                         console.log("---------------------------------------------------");
+                                                         
                                                          console.log('Artist(s): '.bold + songs[i].artists[j].name.red.bold);
                                                   }//artist name for loop ends here
 
@@ -171,9 +183,13 @@
                                                   console.log("---------------------------------------------------");
 
                                       };//end of for loop
-                              });//end of spotify search 
+                                      promptUser();
+                              });//end of spotify search
+
                         };//end of else statement 
+
                         }); //end of inquirer call back function
+                               
               };// end of spotifyThisSong function
 
 
@@ -224,6 +240,7 @@
                                                         console.log("----------------------------------------------------");
                         
                                                 }//end of if statment 
+                                                promptUser();
                                     });// request call back function ends here
                              }// if statement ends here
 
@@ -258,6 +275,7 @@
                                                             console.log("----------------------------------------------------");
 
                                                }//if statement ends
+                                               promptUser();
                                     }); // request call back function ends
                               }; // else statement ends
                       });//inquirer input function ends here
@@ -267,30 +285,23 @@
               function doWhatItSays() {
 
                          
-                         fs.readFile("random.txt", "utf8", function(error, data) {
-                                
-                               
+                         fs.readFile("random.txt", "utf8", function(error, data) {       
                                 var dataArr = data.split(',');
-                                // console.log(dataArr[2]);
+                                if(dataArr[0] === "Spotify-This-Song"){
 
-                                if(dataArr[0] == "Spotify-This-Song"){
-                                                 // require spotify npm
+                                              // require spotify npm
                                               var Spotify = require('node-spotify-api');
                                               // adding id and secret
                                               var spotify = new Spotify({
-                                              id: "15327b32486a4fda88a3e9ec70fa7c1e",
-                                              secret: "5cbd33ae0f4e4083bd14097df393323a"
+                                                id: "15327b32486a4fda88a3e9ec70fa7c1e",
+                                                secret: "5cbd33ae0f4e4083bd14097df393323a"
                                               });
                                               spotify.search({ type: 'track', query:dataArr[1], limit:1 }, function(err, data) {
-                                            
                                                  var songs = data.tracks.items;
-
                                                         // for loop to get song's info
                                                         for (var i = 0; i < songs.length; i++) {
-
                                                                   //for loop to get artist's name
                                                                    for(var j =0; j < songs[i].artists.length; j++){
-
                                                                             //printing Artist name
                                                                            console.log("---------------------------------------------------");
                                                                            console.log('Artist(s): '.bold + songs[i].artists[j].name.red.bold);
@@ -305,11 +316,8 @@
                                                                    console.log('Album: '.bold + songs[i].album.name.red.bold);
                                                                    console.log("---------------------------------------------------");
                                                          };//end of for loop
+                                                         promptUser(); 
                                                 });//end of spotify search function
-
-                                }//end of if statement                                
-
+                                }//end of if statement 
                              });//end of readFile call back function
-
                };//end of DoWhatItSays function
-
